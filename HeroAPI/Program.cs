@@ -4,12 +4,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-//builder.Services.AddCors(x =>
-//{ 
-//    x.AddPolicy("AllowAll", z => z.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-//});
-
 builder.Services.AddCors();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -11,23 +11,23 @@ namespace HeroAPI.Controllers
     public class HeroesController : ControllerBase
     {
         private readonly ILogger<HeroesController> _logger;
-        private readonly HeroDbContext heroDbContext;
+        private readonly HeroDbContext _heroDbContext;
 
         public HeroesController(ILogger<HeroesController> logger, HeroDbContext heroDbContext)
         {
             _logger = logger;
-            this.heroDbContext = heroDbContext;
+            _heroDbContext = heroDbContext;
         }
 
         [HttpGet("")]
-        public List<Hero> GetAll() => heroDbContext.Heroes.ToList();
+        public List<Hero> GetAll() => _heroDbContext.Heroes.ToList();
 
         [HttpGet("{heroId:int}")]
         public IActionResult Get(int heroId)
         {
             if (heroId < 1) return BadRequest();
 
-            var hero = heroDbContext.Heroes.Find(heroId);
+            var hero = _heroDbContext.Heroes.Find(heroId);
             if (hero is null) return NotFound();
 
             return Ok(hero);
@@ -38,11 +38,11 @@ namespace HeroAPI.Controllers
         {
             if (heroId < 1) return BadRequest();
 
-            var hero = heroDbContext.Heroes.Find(heroId);
+            var hero = _heroDbContext.Heroes.Find(heroId);
             if (hero is null) return NotFound();
 
             hero.Name = heroToUpdate.Name;
-            heroDbContext.SaveChanges();
+            _heroDbContext.SaveChanges();
 
             return Ok();
         }
@@ -52,11 +52,11 @@ namespace HeroAPI.Controllers
         {
             if (heroId < 1) return BadRequest();
 
-            var hero = heroDbContext.Heroes.Find(heroId);
+            var hero = _heroDbContext.Heroes.Find(heroId);
             if (hero is null) return NotFound();
 
-            heroDbContext.Heroes.Remove(hero);
-            heroDbContext.SaveChanges();
+            _heroDbContext.Heroes.Remove(hero);
+            _heroDbContext.SaveChanges();
 
             return Ok();
         }
@@ -65,7 +65,7 @@ namespace HeroAPI.Controllers
         public IActionResult Reset()
         {
             // delete all heroes
-            heroDbContext.Heroes.RemoveRange(heroDbContext.Heroes.ToList());
+            _heroDbContext.Heroes.RemoveRange(_heroDbContext.Heroes.ToList());
 
             // re-seed heroes
             var list = new List<Hero>
@@ -79,9 +79,9 @@ namespace HeroAPI.Controllers
                 new Hero { Id = 7, Name = "Red Tornado" }
             };
 
-            heroDbContext.Heroes.AddRange(list);
+            _heroDbContext.Heroes.AddRange(list);
 
-            heroDbContext.SaveChanges();
+            _heroDbContext.SaveChanges();
 
             return Ok();
         }
